@@ -51,6 +51,21 @@ class GraphBuilderVisitor(ast.NodeVisitor):
     def visit_Load(self, node):
         pass
 
+    def visit_Store(self, node):
+        pass
+
+    def visit_Subscript(self, node):
+        self.node_name = "[]"
+        self.generic_visit(node)
+
+    def visit_List(self, node):
+        self.node_name = "list"
+        self.generic_visit(node)
+
+    def visit_Assign(self, node):
+        self.node_name = "assign"
+        self.generic_visit(node)
+
     def visit_Compare(self, node):
         self.node_name = "cmp"
         self.generic_visit(node)
@@ -103,7 +118,7 @@ class GraphBuilderVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_Attribute(self, node):
-        self.node_name = "attr " + node.attr
+        self.node_name = "attr\n" + node.attr
         self.generic_visit(node)
 
     def visit_Return(self, node):
@@ -114,7 +129,18 @@ class GraphBuilderVisitor(ast.NodeVisitor):
         self.node_name = "binop"
         self.generic_visit(node)
 
+    def visit_UnaryOp(self, node):
+        self.node_name = "unop"
+        self.generic_visit(node)
+
+    def visit_USub(self, node):
+        self.node_name = "-"
+        self.generic_visit(node)
+
     def visit_Module(self, node):
+        super(self.__class__, self).generic_visit(node)
+
+    def visit_Expr(self, node):
         super(self.__class__, self).generic_visit(node)
 
 
@@ -139,10 +165,13 @@ def draw_fib_ast():
 
     pos = nx.drawing.nx_pydot.graphviz_layout(graph, prog="dot")
 
+    plt.figure(figsize=(10, 10))
     nx.draw(graph, pos, node_size=1000, node_shape="s")
     nx.draw_networkx_labels(graph, pos, labels=fib_ast_visitor.node_labels, font_size=10)
 
     plt.savefig('artifacts/fib_ast.png', format='png')
+    # or
+    # plt.show()
 
 
 draw_fib_ast()
