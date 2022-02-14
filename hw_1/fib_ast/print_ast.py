@@ -144,8 +144,8 @@ class GraphBuilderVisitor(ast.NodeVisitor):
         super(self.__class__, self).generic_visit(node)
 
 
-def draw_fib_ast():
-    fib_content = read_file('fib.py')
+def draw_fib_ast(filename, save_to):
+    fib_content = read_file(filename)
     fib_ast = ast.parse(fib_content)
     fib_ast_visitor = GraphBuilderVisitor()
     fib_ast_visitor.visit(fib_ast)
@@ -169,9 +169,10 @@ def draw_fib_ast():
     nx.draw(graph, pos, node_size=1000, node_shape="s")
     nx.draw_networkx_labels(graph, pos, labels=fib_ast_visitor.node_labels, font_size=10)
 
-    plt.savefig('artifacts/fib_ast.png', format='png')
+    plt.savefig(save_to, format='png')
     # or
     # plt.show()
 
 
-draw_fib_ast()
+if __name__ == '__main__':
+    draw_fib_ast('./fib.py', '../artifacts/fib_ast.png')
