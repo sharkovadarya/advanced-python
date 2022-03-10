@@ -1,0 +1,4 @@
+Average time for threading: 14.879941403865814
+Median time for threading: 14.306448221206665
+Average time for multiprocessing: 8.831620961427689
+Median time for multiprocessing: 8.583114862442017
